@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evan Belbin Co-op Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0e;
+    --surface: #1a1917;
+    --surface2: #242320;
+    --border: #2e2d2a;
+    --accent: #e8a020;
+    --text: #f0ede8;
+    --muted: #9a9790;
+    --white: #faf9f7;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    background: rgba(15,15,14,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 56px;
+  }
+  .nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: 0.06em; color: var(--accent); text-transform: uppercase; }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; padding: 0 0.85rem; height: 56px; display: flex; align-items: center; transition: color 0.2s; border-bottom: 2px solid transparent; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 6rem 2.5rem 4rem; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px); opacity: 0.3; }
+  .hero-accent { position: absolute; top: -120px; right: -80px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(232,160,32,0.12) 0%, transparent 70%); }
+  .hero-content { position: relative; max-width: 900px; }
+  .hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 12px; }
+  .hero-eyebrow::before { content: ''; display: block; width: 32px; height: 2px; background: var(--accent); }
+  .hero-name { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(4rem, 10vw, 8rem); font-weight: 800; line-height: 0.9; text-transform: uppercase; letter-spacing: -0.01em; color: var(--white); margin-bottom: 0.5rem; }
+  .hero-name span { color: var(--accent); }
+  .hero-subtitle { font-size: 1.1rem; color: var(--muted); margin-bottom: 2rem; max-width: 520px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 5px 12px; color: var(--muted); }
+
+  section { padding: 5rem 2.5rem; border-top: 1px solid var(--border); }
+  .section-inner { max-width: 900px; margin: 0 auto; }
+  .section-header { margin-bottom: 3rem; }
+  .section-num { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; text-transform: uppercase; line-height: 1; color: var(--white); }
+
+  .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .profile-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+  .profile-card.wide { grid-column: 1 / -1; }
+  .card-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+  .card-value { font-size: 0.95rem; color: var(--text); line-height: 1.65; }
+  .stat-big { font-family: 'Barlow Condensed', sans-serif; font-size: 3.5rem; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
+
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; border-left: 3px solid var(--accent); }
+  .skill-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--white); margin-bottom: 0.6rem; }
+  .skill-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+  .coop-header { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 2rem; }
+  .coop-logo-box { width: 72px; height: 72px; flex-shrink: 0; background: var(--accent); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; color: #0f0f0e; letter-spacing: 0.05em; }
+  .coop-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 800; text-transform: uppercase; color: var(--white); line-height: 1.1; }
+  .coop-role { font-size: 0.9rem; color: var(--muted); margin-top: 0.25rem; }
+  .coop-tasks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.2rem; }
+  .task-tag { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(232,160,32,0.12); border: 1px solid rgba(232,160,32,0.3); color: var(--accent); padding: 4px 10px; border-radius: 3px; }
+
+  .bullet-list { list-style: none; display: grid; gap: 0.6rem; margin-top: 0.5rem; }
+  .bullet-list li { font-size: 0.92rem; color: var(--text); line-height: 1.6; padding-left: 1.2rem; position: relative; }
+  .bullet-list li::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+
+  .reflection-blocks { display: grid; gap: 1rem; }
+  .reflection-block { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+  .reflection-q { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+  .reflection-a { font-size: 0.92rem; color: var(--text); line-height: 1.7; }
+
+  .quote-section { background: var(--surface); }
+  .quote-block { border-left: 4px solid var(--accent); padding: 1.5rem 2rem; margin-bottom: 2rem; background: var(--surface2); border-radius: 0 4px 4px 0; }
+  .quote-text { font-family: 'Barlow Condensed', sans-serif; font-size: 1.6rem; font-weight: 700; line-height: 1.3; color: var(--white); margin-bottom: 0.5rem; }
+  .quote-attr { font-size: 0.85rem; color: var(--muted); }
+  .quote-response { font-size: 0.95rem; color: var(--text); line-height: 1.8; }
+
+  .cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .cert-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.25rem 1.5rem; display: flex; gap: 1rem; align-items: flex-start; }
+  .cert-icon { width: 36px; height: 36px; flex-shrink: 0; background: rgba(232,160,32,0.15); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+  .cert-name { font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 700; text-transform: uppercase; color: var(--white); line-height: 1.2; margin-bottom: 0.2rem; }
+  .cert-detail { font-size: 0.82rem; color: var(--muted); }
+
+  .cover-letter-box { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 2.5rem; font-size: 0.93rem; line-height: 1.75; color: var(--text); }
+  .cl-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .cl-name { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; text-transform: uppercase; color: var(--white); }
+  .cl-contact { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
+  .cl-section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin: 1.5rem 0 0.6rem; }
+  .cl-bullets { list-style: none; display: grid; gap: 0.4rem; }
+  .cl-bullets li { font-size: 0.9rem; color: var(--text); line-height: 1.6; padding-left: 1.2rem; position: relative; }
+  .cl-bullets li::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
+  .cl-closing { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: var(--muted); }
+
+  footer { padding: 2rem 2.5rem; border-top: 1px solid var(--border); text-align: center; font-size: 0.8rem; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-content > * { animation: fadeUp 0.6s ease both; }
+  .hero-eyebrow { animation-delay: 0.1s; }
+  .hero-name { animation-delay: 0.2s; }
+  .hero-subtitle { animation-delay: 0.3s; }
+  .hero-tags { animation-delay: 0.4s; }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 1rem; }
+    .nav-links a { padding: 0 0.45rem; font-size: 0.68rem; }
+    .hero, section { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .profile-grid { grid-template-columns: 1fr; }
+    .profile-card.wide { grid-column: 1; }
+    .coop-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Evan Belbin</div>
+  <div class="nav-links">
+    <a href="#profile">Profile</a>
+    <a href="#coop">Co-op</a>
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#certs">Certs</a>
+    <a href="#reflections">Reflections</a>
+    <a href="#quote">Quote</a>
+    <a href="#coverletter">Cover Letter</a>
+    <a href="#resume">Resume</a>
+  </div>
+</nav>
+
+<div class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Co-op Portfolio 2025-2026</div>
+    <div class="hero-name">Evan<br><span>Belbin</span></div>
+    <div class="hero-subtitle">Grade 11 student at Dunbarton High School · Co-op placement at ICON Homes as a Construction Handyman · SHSM</div>
+    <div class="hero-tags">
+      <span class="hero-tag">Construction</span>
+      <span class="hero-tag">Skilled Trades</span>
+      <span class="hero-tag">ICON Homes</span>
+      <span class="hero-tag">SHSM</span>
+      <span class="hero-tag">French Immersion</span>
+      <span class="hero-tag">Graduating 2027</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<section id="profile">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">01 Profile</div>
+      <div class="section-title">About Me</div>
+    </div>
+    <div class="profile-grid">
+      <div class="profile-card wide">
+        <div class="card-label">Who I Am</div>
+        <div class="card-value">I'm a hands-on, practical learner who values real-world results. I thrive in environments where every day looks a little different and where I can see the direct impact of my work. My career goal is to build a future in the skilled trades, working toward becoming a licensed tradesman. I'm a French Immersion student since Grade 1 and am enrolled in the SHSM construction pathway at Dunbarton High School.</div>
+      </div>
+      <div class="profile-card">
+        <div class="card-label">School</div>
+        <div class="card-value">Dunbarton High School<br>Grade 11 · Expected graduation 2027<br>SHSM Construction Pathway<br>French Immersion</div>
+      </div>
+      <div class="profile-card">
+        <div class="card-label">Career Goal</div>
+        <div class="card-value">Licensed tradesman in the construction industry. Currently exploring apprenticeship programs and trade school options for after graduation.</div>
+      </div>
+      <div class="profile-card">
+        <div class="stat-big">5</div>
+        <div class="card-label">Months on placement</div>
+        <div class="card-value">Active co-op placement at ICON Homes</div>
+      </div>
+      <div class="profile-card">
+        <div class="card-label">Contact</div>
+        <div class="card-value">715 Swan Place, Pickering, ON L1X 2V7<br>(437) 255-0875<br>Evan.Belbin@outlook.com</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CO-OP -->
+<section id="coop">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">02 Co-op Placement</div>
+      <div class="section-title">ICON Homes</div>
+    </div>
+    <div class="coop-header">
+      <div class="coop-logo-box">ICON</div>
+      <div>
+        <div class="coop-name">ICON Homes</div>
+        <div class="coop-role">Construction Handyman · Ontario · 2025-2026</div>
+        <div class="coop-tasks">
+          <span class="task-tag">Drywall Repair</span>
+          <span class="task-tag">Mudding</span>
+          <span class="task-tag">Sanding</span>
+          <span class="task-tag">Painting</span>
+          <span class="task-tag">Caulking</span>
+          <span class="task-tag">Deficiency Repairs</span>
+          <span class="task-tag">Door Sweeps</span>
+          <span class="task-tag">Multitool Operation</span>
+          <span class="task-tag">Site Safety</span>
+          <span class="task-tag">Trades Support</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-card" style="margin-bottom:1rem;">
+      <div class="card-label">About the placement</div>
+      <div class="card-value">ICON Homes is a residential home builder based in Ontario. As a construction handyman, I work in newly built and occupied homes assisting with deficiency repairs and finishing work. My tasks have included drywall repair, mudding, sanding, painting, caulking, and installing door sweeps. I've used a multitool to cut access holes to help plumbers locate leaks and prepare areas for new piping, and I've worked safely alongside electricians, plumbers, carpenters, and HVAC technicians — observing firsthand how the trades coordinate on a live job site.</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">03 Experience</div>
+      <div class="section-title">Beyond Co-op</div>
+    </div>
+    <div class="profile-grid">
+      <div class="profile-card">
+        <div class="card-label">Summer Camp Counselor</div>
+        <div class="card-value">Vancouver, 2025 — Supported children ages 3-12, including children with disabilities. Developed patience, communication, and leadership skills in a fast-paced, people-focused environment.</div>
+      </div>
+      <div class="profile-card">
+        <div class="card-label">Reading Buddies Mentor</div>
+        <div class="card-value">Helped younger students build confidence and improve their literacy skills. Demonstrated a commitment to community and working with others in a supportive role.</div>
+      </div>
+      <div class="profile-card">
+        <div class="card-label">Community Involvement</div>
+        <div class="card-value">
+          <ul class="bullet-list">
+            <li>Volunteered in annual forest cleanups</li>
+            <li>Neighbourhood snow shoveling</li>
+            <li>Alternate newspaper carrier</li>
+          </ul>
+        </div>
+      </div>
+      <div class="profile-card">
+        <div class="card-label">Technical Skills</div>
+        <div class="card-value">Proficient with Microsoft Office and Google Suite. Comfortable with PC hardware and software. Fluent in French (French Immersion since Grade 1). Comfortable with hand tools, power tools, multitools, and basic construction equipment.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">04 Essential Skills</div>
+      <div class="section-title">What I Bring</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">Oral Communication</div>
+        <div class="skill-desc">On a construction site, clear communication is a safety issue. I've learned to ask questions when I'm unsure, confirm instructions before acting, and communicate clearly with both tradespeople and homeowners in occupied homes.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Teamwork</div>
+        <div class="skill-desc">Every task at ICON Homes involves working alongside other people. I've learned to read the pace of the crew, anticipate what's needed, and contribute effectively — whether with trades or as a camp counselor supporting a team.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Problem Solving</div>
+        <div class="skill-desc">Construction rarely goes exactly as planned. I've developed the habit of thinking through a problem before reacting and finding practical solutions rather than waiting to be told what to do.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Adaptability</div>
+        <div class="skill-desc">No two days on a build site are the same. I've become comfortable adjusting to new tasks, new tools, and changing priorities — a skill reinforced by working in both construction and camp counseling environments.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTS -->
+<section id="certs">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">05 Certificates and Achievements</div>
+      <div class="section-title">Credentials</div>
+    </div>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <div class="cert-icon">🩺</div>
+        <div>
+          <div class="cert-name">Standard First Aid and CPR-C</div>
+          <div class="cert-detail">DDSB SHSM Program · November 27, 2025</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">⚗️</div>
+        <div>
+          <div class="cert-name">WHMIS</div>
+          <div class="cert-detail">SHSM · Chemistry</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🦺</div>
+        <div>
+          <div class="cert-name">Health and Safety Training</div>
+          <div class="cert-detail">SHSM · Manufacturing, Transportation Tech, Woodworking</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🏗️</div>
+        <div>
+          <div class="cert-name">Ministry of Labour Worker Training</div>
+          <div class="cert-detail">Online certification · Occupational Health and Safety</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REFLECTIONS -->
+<section id="reflections">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">06 Reflections</div>
+      <div class="section-title">What I Learned</div>
+    </div>
+
+    <div class="profile-card" style="margin-bottom:1.5rem;">
+      <div class="card-label">A situation that taught me an important lesson</div>
+      <div class="card-value">Early in my placement, I was asked to help with a drywall repair and I cut a piece to the wrong measurement because I rushed through the measuring step. The piece didn't fit and had to be redone, which cost time on a tight schedule. My supervisor didn't yell he just showed me the right way, calmly. That moment taught me why tradespeople always say "measure twice, cut once." It sounds simple, but on a real job site, one mistake creates a chain reaction. I learned that slowing down and being precise is actually faster in the long run than rushing and having to redo work. Going forward, I double-check every measurement before I cut, and I've applied that same careful mindset to other tasks on site. This lesson will stay with me because it applies to so much more than drywall it's about taking your work seriously and respecting the time of the whole team.</div>
+    </div>
+
+    <div class="reflection-blocks">
+      <div class="reflection-block">
+        <div class="reflection-q">Is construction suitable for you?</div>
+        <div class="reflection-a">Yes, more than I expected. I genuinely enjoy physical, hands-on work and I like seeing something take shape over time. By the end of a shift, you can look at what you've done and feel a real sense of accomplishment. That feeling keeps me motivated.</div>
+      </div>
+      <div class="reflection-block">
+        <div class="reflection-q">What did you enjoy most?</div>
+        <div class="reflection-a">I enjoyed the variety. No two days are exactly the same. I also liked being part of a crew — there's a real team dynamic on a construction site where everyone depends on each other to do their part.</div>
+      </div>
+      <div class="reflection-block">
+        <div class="reflection-q">What was surprising or difficult?</div>
+        <div class="reflection-a">I didn't expect how much precision matters. I assumed construction was mostly just heavy lifting, but there's a lot of careful measuring, planning, and technique involved. The physical demands were also more intense than I anticipated at first, but I adapted quickly.</div>
+      </div>
+      <div class="reflection-block">
+        <div class="reflection-q">Was it what you expected?</div>
+        <div class="reflection-a">Partly yes, partly no. I expected it to be demanding and physical, and it is. But I didn't expect to learn so many different skills so quickly, or to feel as respected by the crew as I did from early on.</div>
+      </div>
+      <div class="reflection-block">
+        <div class="reflection-q">How has this influenced your future plans?</div>
+        <div class="reflection-a">This experience has confirmed that I want to pursue the skilled trades after high school. I'm now seriously looking into apprenticeship programs and trade school options for after graduation. Before co-op I wasn't sure; now I am.</div>
+      </div>
+      <div class="reflection-block">
+        <div class="reflection-q">Lasting memories</div>
+        <div class="reflection-a">The memory I'll carry longest from this placement is when the crew took me out to eat on my birthday. I didn't expect it at all — these are busy, experienced tradespeople, and the fact that they took the time to do something like that meant a lot to me. It showed me that the people you work with can become more than just coworkers, and that a good workplace actually cares about the people in it. That moment made me feel genuinely valued, and it's something I won't forget.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section id="quote" class="quote-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">07 Quote Response</div>
+      <div class="section-title">In My Own Words</div>
+    </div>
+    <div class="quote-block">
+      <div class="quote-text">"A person who never made a mistake never tried anything new."</div>
+      <div class="quote-attr">Albert Einstein, Scientist</div>
+    </div>
+    <div class="quote-response">
+      Albert Einstein once said, "A person who never made a mistake never tried anything new," and my co-op experience at ICON Homes brought that idea to life in a very real way. When I first arrived on site, I was stepping into an environment completely outside my comfort zone — unfamiliar tools, experienced tradespeople all around me, and tasks I had never attempted before. It was almost guaranteed that I would make mistakes, and I did. Early on, I miscalculated a measurement that wasted material and slowed down part of our schedule. In the moment, I felt embarrassed, but my supervisor used it as a teaching opportunity rather than a reason to criticize me. That small failure became one of the most valuable lessons of my placement: slow down, be precise, and own your mistakes instead of hiding them. Einstein's quote resonates with me because construction is a field where trying new things is unavoidable — every site, every material, and every task has its own challenges. If I had been afraid to make mistakes, I never would have volunteered to try new tasks or pushed myself to improve. Over time, my errors became less frequent not because I stopped trying new things, but because I learned from each one. Going forward, whether in a trade apprenticeship, a future job, or any challenge in life, I plan to carry that mindset with me: mistakes are not failures — they are proof that I'm trying, growing, and not standing still.
+    </div>
+  </div>
+</section>
+
+<!-- COVER LETTER -->
+<section id="coverletter">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">08 Competencies</div>
+      <div class="section-title">Cover Letter</div>
+    </div>
+    <div class="cover-letter-box">
+      <div class="cl-header">
+        <div class="cl-name">Evan Belbin</div>
+        <div class="cl-contact">715 Swan Place, Pickering, ON L1X 2V7 &nbsp;|&nbsp; (437) 255-0875 &nbsp;|&nbsp; Evan.Belbin@outlook.com</div>
+      </div>
+
+      <div class="cl-section-title">Construction and Co-op Experience</div>
+      <ul class="cl-bullets">
+        <li>SHSM Co-op student with ICON Homes, assisting with drywall repair, mudding, sanding, painting, caulking, and deficiency repairs in newly built and occupied homes.</li>
+        <li>Installed door sweeps, gathered materials, shoveled snow, and supported trades during service calls.</li>
+        <li>Used a multitool to cut access holes to help plumbers locate leaks and prepare areas for new piping.</li>
+        <li>Worked safely around electricians, plumbers, carpenters, and HVAC technicians, observing how trades coordinate.</li>
+      </ul>
+
+      <div class="cl-section-title">Availability, Certifications and Safety Training</div>
+      <ul class="cl-bullets">
+        <li>Standard First Aid and CPR-C (DDSB SHSM Program, November 27, 2025).</li>
+        <li>WHMIS and Health and Safety training through SHSM, Chemistry, Manufacturing, Transportation Tech, and Woodworking.</li>
+        <li>Consistent PPE use, safe tool handling, and strong awareness of job-site safety expectations.</li>
+      </ul>
+
+      <div class="cl-section-title">Interpersonal and Teamwork Abilities</div>
+      <ul class="cl-bullets">
+        <li>Summer Camp Counselor (Vancouver, 2025), supporting children ages 3-12, including children with disabilities — developing patience, communication, and leadership.</li>
+        <li>Reading Buddies mentor, helping younger students build confidence and improve literacy skills.</li>
+        <li>Experience working respectfully in occupied homes, communicating clearly with homeowners and trades.</li>
+      </ul>
+
+      <div class="cl-section-title">Strong Character and Work Ethic</div>
+      <ul class="cl-bullets">
+        <li>Known as responsible, courteous, and reliable, with strong attendance and punctuality.</li>
+        <li>Volunteered in annual forest cleanups, demonstrating dedication and community involvement.</li>
+        <li>Worked as a neighbourhood snow shoveler and alternate newspaper carrier, building trust and responsibility.</li>
+      </ul>
+
+      <div class="cl-section-title">Practical, Technical and Learning Skills</div>
+      <ul class="cl-bullets">
+        <li>Comfortable using hand tools, power tools, multitools, and basic construction equipment.</li>
+        <li>Capable of working independently, contributing to teams, and learning new information quickly.</li>
+        <li>Proficient with Microsoft Office, Google Suite, and PC hardware/software.</li>
+        <li>Fluent in French (French Immersion since Grade 1).</li>
+      </ul>
+
+      <div class="cl-closing">
+        These skills and experiences have prepared me to succeed. I am eager to continue learning, work safely, and build a strong foundation toward becoming a licensed tradesman.<br><br>
+        Sincerely,<br>
+        <strong style="color: var(--white);">Evan Belbin</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">09 Resume</div>
+      <div class="section-title">Full Resume</div>
+    </div>
+    <div class="cover-letter-box">
+
+      <div class="cl-header">
+        <div class="cl-name">Evan Belbin</div>
+        <div class="cl-contact">715 Swan Place, Pickering, ON L1X 2V7 &nbsp;|&nbsp; (437) 255-0875 &nbsp;|&nbsp; Evan.Belbin@outlook.com</div>
+      </div>
+
+      <div class="cl-section-title">Professional Summary</div>
+      <p style="font-size:0.92rem; color:var(--text); line-height:1.75;">Motivated Grade 11 student and Pickering resident with hands-on construction co-op experience, youth leadership, and a strong record of community involvement. SHSM pathway student with active certifications in First Aid, CPR-C, and WHMIS. Bilingual (French Immersion). Reliable, safety-conscious, and eager to keep building skills in the trades.</p>
+
+      <div class="cl-section-title">Key Qualifications</div>
+      <ul class="cl-bullets">
+        <li>Standard First Aid and CPR-C (Current, November 2025)</li>
+        <li>Experienced co-op construction handyman: drywall, mudding, painting, caulking, multitool operation</li>
+        <li>Experienced camp counselor including working with children with disabilities</li>
+        <li>Reliable, hardworking, safety-conscious, adaptable, and punctual</li>
+        <li>Leadership and mentoring skills from camp, band, and peer tutoring</li>
+        <li>Hands-on experience with hand tools, power tools, and mechanical repairs</li>
+        <li>Physically fit: capable of lifting 22kg+, standing long periods, performing manual labour safely</li>
+        <li>Proficient: Microsoft Office, Google Suite, PC troubleshooting</li>
+        <li>Bilingual: French Immersion (Grade 1 to present)</li>
+      </ul>
+
+      <div class="cl-section-title">Work Experience</div>
+
+      <div style="margin-bottom:1.25rem;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px;">
+          <span style="font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:700; color:var(--white); text-transform:uppercase; letter-spacing:0.04em;">Construction Handyman — ICON Homes</span>
+          <span style="font-size:0.8rem; color:var(--muted);">Ontario · 2025-2026</span>
+        </div>
+        <div style="font-size:0.8rem; color:var(--accent); margin-bottom:0.5rem;">SHSM Co-op Placement</div>
+        <ul class="cl-bullets">
+          <li>Performed drywall repair, mudding, sanding, painting, caulking, and deficiency repairs in newly built and occupied homes.</li>
+          <li>Installed door sweeps, gathered materials, shoveled snow, and supported trades during service calls.</li>
+          <li>Used a multitool to cut access holes to assist plumbers with leak detection and pipe preparation.</li>
+          <li>Worked safely alongside electricians, plumbers, carpenters, and HVAC technicians on live job sites.</li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom:1.25rem;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px;">
+          <span style="font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:700; color:var(--white); text-transform:uppercase; letter-spacing:0.04em;">Junior Camp Counselor (Volunteer) — Camp Shalom</span>
+          <span style="font-size:0.8rem; color:var(--muted);">Vancouver, BC · June-July 2025</span>
+        </div>
+        <ul class="cl-bullets">
+          <li>Served as a Junior Camp Counselor for 6 weeks at a community-run camp in Vancouver, BC.</li>
+          <li>Supported children ages 3-12, including those with autism and developmental and behavioural challenges.</li>
+          <li>Assisted in delivering age-appropriate programs: field trips, swimming, arts and crafts, cooking classes, and reading activities.</li>
+          <li>Led icebreakers, reinforced camp rules and the buddy system, and maintained open communication with families.</li>
+          <li>Helped create a safe, inclusive, and positive environment for all campers and their families.</li>
+        </ul>
+      </div>
+
+      <div class="cl-section-title">Experience and Contributions</div>
+      <ul class="cl-bullets">
+        <li>Operated heavy duty equipment and tools in Manufacturing Technology, Transportation Technology, and Woodworking (2023-Present)</li>
+        <li>Alternate newspaper carrier for Pickering News Advertiser — assembled, packaged, and delivered on time (2020-2023)</li>
+        <li>Volunteered for community cleanups, snow shoveling, and baseball field maintenance (2017-Present)</li>
+        <li>Mentored younger students through Reading Buddies and peer tutoring (2018-2023)</li>
+        <li>Junior Band Member: rehearsals and sold-out concerts (2023-2024)</li>
+        <li>Collaborated on lab experiments and reporting in Chemistry (2024-2025)</li>
+        <li>Mechanical collaboration with peers on car repairs (2025)</li>
+      </ul>
+
+      <div class="cl-section-title">Awards and Achievements</div>
+      <ul class="cl-bullets">
+        <li>Maple Ridge "Super Kid for Outstanding Responsibility" Award (2023)</li>
+        <li>MVP Award, Minor Mosquito Rep AA — Richmond Hill Phoenix Tournament (August 2019)</li>
+        <li>Pickering Ball Association House League Player of the Year (2017)</li>
+        <li>Rookie Skills Batting Champion Gold Medalist (2017 provincial tournament)</li>
+        <li>Player of the Game (2017, 2018 — awarded official tournament game ball)</li>
+        <li>Pickering Red Sox Rookie Select Team Player — Led team in HRs and RBIs</li>
+        <li>Gold Champions/Finalists, Team Championships, Pickering Red Sox Rep AA (EOBA) and Select (2017-2019)</li>
+      </ul>
+
+      <div class="cl-section-title">Certifications and Safety Training</div>
+      <ul class="cl-bullets">
+        <li>Standard First Aid and CPR-C — DDSB SHSM Program (November 27, 2025)</li>
+        <li>WHMIS — completed through SHSM and Grade 9/10 Chemistry</li>
+        <li>Health and Safety — Grade 10 Transportation Technology and Manufacturing Technology (2023-Present)</li>
+        <li>Consistent PPE use and safe tool handling across all placements and coursework</li>
+      </ul>
+
+      <div class="cl-section-title">Education</div>
+      <ul class="cl-bullets">
+        <li>Dunbarton High School, DDSB, Pickering, ON — Grade 11 French Immersion (2023-Present)</li>
+        <li>Maple Ridge Public School, DDSB, Pickering, ON — French Immersion (2015-2023)</li>
+        <li>Gandatsetiagon Public School, DDSB, Pickering, ON — JK-SK (2013-2015)</li>
+      </ul>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  Evan Belbin &nbsp;·&nbsp; Co-op Portfolio &nbsp;·&nbsp; Dunbarton High School &nbsp;·&nbsp; 2025-2026
+</footer>
+
+<script>
+  const sections = document.querySelectorAll('section[id], div.hero');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.id || 'home';
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>
